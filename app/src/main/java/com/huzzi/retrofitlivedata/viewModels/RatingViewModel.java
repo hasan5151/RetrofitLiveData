@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.huzzi.retrofitlivedata.ApiInterface;
+import com.huzzi.retrofitlivedata.RxFlowableSchedulers;
 import com.huzzi.retrofitlivedata.RxSingleSchedulers;
 import com.huzzi.retrofitlivedata.constants.Status;
 import com.huzzi.retrofitlivedata.state.ApiResponse;
@@ -17,8 +18,10 @@ import retrofit2.Response;
 public class RatingViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private MutableLiveData<ApiResponse> response;
+    private MutableLiveData<ApiResponse> flowableResponse;
     private ApiInterface apiInterface;
     private RxSingleSchedulers rxSingleSchedulers;
+    private RxFlowableSchedulers rxFlowableSchedulers;
 
     public RatingViewModel(ApiInterface apiInterface, RxSingleSchedulers rxSingleSchedulers){
         disposable = new CompositeDisposable();
@@ -26,9 +29,19 @@ public class RatingViewModel extends ViewModel {
         this.apiInterface =apiInterface;
         this.rxSingleSchedulers=rxSingleSchedulers;
     }
+    public RatingViewModel(ApiInterface apiInterface, RxFlowableSchedulers rxFlowableSchedulers){
+        disposable = new CompositeDisposable();
+        flowableResponse = new MutableLiveData<>();
+        this.apiInterface =apiInterface;
+        this.rxFlowableSchedulers=rxFlowableSchedulers;
+    }
 
     public MutableLiveData<ApiResponse> getResponse() {
-             return response;
+        return response;
+    }
+
+    public MutableLiveData<ApiResponse> getFlowableResponse() {
+        return flowableResponse;
     }
 
     public void getData(){
@@ -41,6 +54,19 @@ public class RatingViewModel extends ViewModel {
                 },error->{
                     ApiResponse.ERROR_STATE.setError(error);
                     response.postValue(ApiResponse.ERROR_STATE);
+                }));
+    }
+
+    public void getFlowableData(){
+         disposable.add(apiInterface.flowableData()
+                 .doOnSubscribe(subscription -> flowableResponse.postValue(ApiResponse.LOADING_STATE))
+                 .compose(rxFlowableSchedulers.applyFlowableSchedulers())
+                .subscribe(result->{
+                    ApiResponse.SUCCESS_STATE.setData(result);
+                    flowableResponse.postValue(ApiResponse.SUCCESS_STATE);
+                },error->{
+                    ApiResponse.ERROR_STATE.setError(error);
+                    flowableResponse.postValue(ApiResponse.ERROR_STATE);
                 }));
     }
 

@@ -21,9 +21,5 @@ public class MainActivity extends AppCompatActivity {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                  .build();
-
-
-
-
     }
 }
