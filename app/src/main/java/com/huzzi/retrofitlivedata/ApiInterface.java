@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import com.huzzi.retrofitlivedata.model.LoginModel;
 import com.huzzi.retrofitlivedata.state.ApiResponse;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import okhttp3.ResponseBody;
@@ -18,6 +20,6 @@ public interface ApiInterface {
         Single<LoginModel> rxData();
 
         @GET("monthlyReport/")
-        Flowable<LoginModel> flowableData();
+        Flowable<List<LoginModel>> flowableData();
 
 }

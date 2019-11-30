@@ -5,11 +5,11 @@ import com.huzzi.retrofitlivedata.constants.Status;
 
 public class ApiResponse<T> {
 
-    public Status status;
-    protected T data;
-    public  Throwable error;
+    private Status status;
+    private T data;
+    private Throwable error;
 
-    public ApiResponse( T data,Status status, Throwable error) {
+    private ApiResponse(T data, Status status, Throwable error) {
         this.status = status;
         this.data = data;
         this.error = error;
@@ -17,7 +17,7 @@ public class ApiResponse<T> {
 
     public static ApiResponse ERROR_STATE = new ApiResponse(null, Status.ERROR, new Throwable());
     public static ApiResponse LOADING_STATE = new ApiResponse(null, Status.LOADING, null);
-    public static ApiResponse SUCCESS_STATE = new ApiResponse(new Object(), Status.SUCCESS, null);
+    public static ApiResponse SUCCESS_STATE = new ApiResponse(null, Status.SUCCESS, null);
 
 
     public Status getStatus() {

@@ -1,5 +1,7 @@
 package com.huzzi.retrofitlivedata.viewModels;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -9,7 +11,10 @@ import com.huzzi.retrofitlivedata.ApiInterface;
 import com.huzzi.retrofitlivedata.RxFlowableSchedulers;
 import com.huzzi.retrofitlivedata.RxSingleSchedulers;
 import com.huzzi.retrofitlivedata.constants.Status;
+import com.huzzi.retrofitlivedata.model.LoginModel;
 import com.huzzi.retrofitlivedata.state.ApiResponse;
+
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.ResponseBody;
@@ -18,7 +23,7 @@ import retrofit2.Response;
 public class RatingViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private MutableLiveData<ApiResponse> response;
-    private MutableLiveData<ApiResponse> flowableResponse;
+    private MutableLiveData<ApiResponse<List<LoginModel>>> flowableResponse;
     private ApiInterface apiInterface;
     private RxSingleSchedulers rxSingleSchedulers;
     private RxFlowableSchedulers rxFlowableSchedulers;
@@ -40,7 +45,7 @@ public class RatingViewModel extends ViewModel {
         return response;
     }
 
-    public MutableLiveData<ApiResponse> getFlowableResponse() {
+    public MutableLiveData<ApiResponse<List<LoginModel>>> getFlowableResponse() {
         return flowableResponse;
     }
 
@@ -65,8 +70,8 @@ public class RatingViewModel extends ViewModel {
                     ApiResponse.SUCCESS_STATE.setData(result);
                     flowableResponse.postValue(ApiResponse.SUCCESS_STATE);
                 },error->{
-                    ApiResponse.ERROR_STATE.setError(error);
-                    flowableResponse.postValue(ApiResponse.ERROR_STATE);
+//                    ApiResponse.ERROR_STATE.setError(error);
+//                    flowableResponse.postValue(ApiResponse.ERROR_STATE);
                 }));
     }
 

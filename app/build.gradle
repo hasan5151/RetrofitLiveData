@@ -66,6 +66,7 @@ dependencies {
     implementation "android.arch.lifecycle:runtime:1.1.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.1.0"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 
 
 }
