@@ -1,8 +1,8 @@
-package com.huzzi.retrofitlivedata;
+package com.huzzi.retrofitlivedata.state;
 
 import org.reactivestreams.Subscription;
 
-class ViewState<T> {
+public class ViewState<T> {
     void onSuccess(T responseBodyResponse) {
         System.out.println("r" + responseBodyResponse);
     }

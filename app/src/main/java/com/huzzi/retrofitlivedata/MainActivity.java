@@ -20,15 +20,10 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("https://redpetroleum.herokuapp.com/index.php/api/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
-                .build();
+                 .build();
 
 
 
 
-
-        retrofit.create(ApiInterface.class).rxData().compose(RxSingleSchedulers.DEFAULT.applySchedulers()).subscribe(res->{
-
-        });
     }
 }

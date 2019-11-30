@@ -1,21 +1,15 @@
 package com.huzzi.retrofitlivedata;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveDataReactiveStreams;
-import androidx.lifecycle.Observer;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import org.apache.tools.ant.Main;
+import com.huzzi.retrofitlivedata.state.ViewState;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.robolectric.annotation.Config;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -37,30 +31,6 @@ public class ExampleUnitTest {
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-
-        ViewState<Response<ResponseBody>> tes =  new ViewState<>();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://redpetroleum.herokuapp.com/index.php/api/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-        apiInterface.rxData().compose(RxSingleSchedulers.TEST_SCHEDULER.applySchedulers()).subscribe(res->{
-            System.out.println("res."+ res.isSuccessful());
-        });
-
-        apiInterface.rxData().subscribe(responseBodyResponse ->
-                System.out.println("Sess3"+ responseBodyResponse.isSuccessful()));
-
-        apiInterface.flowableData().compose(RxFlowableSchedulers.TEST.applyFlowableSchedulers()).subscribe(tes::onSuccess,tes::onError);
-
-
-     }
 
 
 
