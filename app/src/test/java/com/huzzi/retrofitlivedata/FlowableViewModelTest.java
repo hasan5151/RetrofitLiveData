@@ -84,7 +84,7 @@ public class FlowableViewModelTest {
 
     @Test
     public void testApiFetchDataError() {
-        when(apiClient.flowableData()).thenReturn(Flowable.error(new Exception()));
+        when(apiClient.flowableData()).thenReturn(Flowable.error(new Throwable()));
         viewModel.getFlowableData();
         verify(observer).onChanged(ApiResponse.LOADING_STATE);
         verify(observer).onChanged(ApiResponse.ERROR_STATE);

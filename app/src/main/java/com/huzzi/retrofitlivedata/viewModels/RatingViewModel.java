@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class RatingViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private MutableLiveData<ApiResponse> response;
-    private MutableLiveData<ApiResponse<List<LoginModel>>> flowableResponse;
+    private MutableLiveData<ApiResponse<List<LoginModel>>> flowableResponse = new MutableLiveData<>();
     private ApiInterface apiInterface;
     private RxSingleSchedulers rxSingleSchedulers;
     private RxFlowableSchedulers rxFlowableSchedulers;
@@ -36,16 +36,16 @@ public class RatingViewModel extends ViewModel {
     }
     public RatingViewModel(ApiInterface apiInterface, RxFlowableSchedulers rxFlowableSchedulers){
         disposable = new CompositeDisposable();
-        flowableResponse = new MutableLiveData<>();
+//        flowableResponse = new MutableLiveData<ApiResponse<List<LoginModel>>>();
         this.apiInterface =apiInterface;
         this.rxFlowableSchedulers=rxFlowableSchedulers;
     }
 
-    public MutableLiveData<ApiResponse> getResponse() {
+    public LiveData<ApiResponse> getResponse() {
         return response;
     }
 
-    public MutableLiveData<ApiResponse<List<LoginModel>>> getFlowableResponse() {
+    public LiveData<ApiResponse<List<LoginModel>>> getFlowableResponse() {
         return flowableResponse;
     }
 
@@ -57,6 +57,8 @@ public class RatingViewModel extends ViewModel {
                     ApiResponse.SUCCESS_STATE.setData(result);
                     response.postValue(ApiResponse.SUCCESS_STATE);
                 },error->{
+                    System.out.println(error.getMessage());
+
                     ApiResponse.ERROR_STATE.setError(error);
                     response.postValue(ApiResponse.ERROR_STATE);
                 }));
@@ -65,15 +67,21 @@ public class RatingViewModel extends ViewModel {
     public void getFlowableData(){
          disposable.add(apiInterface.flowableData()
                  .doOnSubscribe(subscription -> flowableResponse.postValue(ApiResponse.LOADING_STATE))
-//                 .compose(rxFlowableSchedulers.applyFlowableSchedulers())
                  .compose(rxFlowableSchedulers.applyFlowableSchedulers())
                 .subscribe(result->{
                     ApiResponse.SUCCESS_STATE.setData(result);
                     flowableResponse.postValue(ApiResponse.SUCCESS_STATE);
-                },error->{
-//                    ApiResponse.ERROR_STATE.setError(error);
-//                    flowableResponse.postValue(ApiResponse.ERROR_STATE);
+                },throwable -> {
+                    ApiResponse.ERROR_STATE.setError(throwable);
+                    flowableResponse.postValue(ApiResponse.ERROR_STATE);
                 }));
+    }
+
+    private void test(Throwable throwable) {
+
+        ApiResponse.ERROR_STATE.setError(throwable);
+        ApiResponse.ERROR_STATE.setData(null);
+        flowableResponse.postValue(ApiResponse.ERROR_STATE);
     }
 
 
