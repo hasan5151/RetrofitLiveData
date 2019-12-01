@@ -65,6 +65,7 @@ public class RatingViewModel extends ViewModel {
     public void getFlowableData(){
          disposable.add(apiInterface.flowableData()
                  .doOnSubscribe(subscription -> flowableResponse.postValue(ApiResponse.LOADING_STATE))
+//                 .compose(rxFlowableSchedulers.applyFlowableSchedulers())
                  .compose(rxFlowableSchedulers.applyFlowableSchedulers())
                 .subscribe(result->{
                     ApiResponse.SUCCESS_STATE.setData(result);

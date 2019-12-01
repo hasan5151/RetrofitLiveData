@@ -23,9 +23,5 @@ public interface RxSingleSchedulers {
                     .observeOn(Schedulers.trampoline());
         }
     };
-
-
-
     <T> SingleTransformer<T, T> applySchedulers();
-
 }
