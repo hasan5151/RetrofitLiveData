@@ -1,7 +1,5 @@
 package com.huzzi.retrofitlivedata;
 
-import android.util.Log;
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
