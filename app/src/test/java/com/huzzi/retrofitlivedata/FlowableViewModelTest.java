@@ -18,6 +18,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
@@ -62,7 +65,8 @@ public class FlowableViewModelTest {
 
     @Test
     public void testApiFetchDataSuccess() {
-        when(apiClient.flowableData()).thenReturn(Flowable.just(new LoginModel()));
+        List<LoginModel> loginModelList = new ArrayList<>();
+        when(apiClient.flowableData()).thenReturn(Flowable.just(loginModelList));
         viewModel.getFlowableData();
         verify(observer).onChanged(ApiResponse.LOADING_STATE);
         verify(observer).onChanged(ApiResponse.SUCCESS_STATE);
