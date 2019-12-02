@@ -24,6 +24,7 @@ import java.util.List;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.times;
@@ -65,12 +66,18 @@ public class FlowableViewModelTest {
 
     @Test
     public void testApiFetchDataSuccess() {
+        LoginModel loginModel= new LoginModel();
+        loginModel.setOpId("selam");
         List<LoginModel> loginModelList = new ArrayList<>();
+        loginModelList.add(loginModel);
+
         when(apiClient.flowableData()).thenReturn(Flowable.just(loginModelList));
         viewModel.getFlowableData();
         verify(observer).onChanged(ApiResponse.LOADING_STATE);
         verify(observer).onChanged(ApiResponse.SUCCESS_STATE);
         verify(observer,times(1)).onChanged(ApiResponse.LOADING_STATE);
+        assertEquals(ApiResponse.SUCCESS_STATE.getData(),loginModelList);
+        apiClient.flowableData().test().assertValue(loginModelList);
     }
 
     @Test
